@@ -1,0 +1,41 @@
+# Dependency folders
+node_modules/
+.next/
+
+# Build output
+build/
+dist/
+
+# Lock files (optional – include if you want consistent installs)
+# package-lock.json
+
+# Log files
+logs/
+*.log
+*.tmp
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variable files
+.env
+.env.local
+.env.test
+*.env
+.dev.env
+.env2
+.env.production
+.production.env
+
+# Uploaded files
+/uploads/
+
+# Deployment-related notes
+deployment.txt

@@ -1,0 +1,78 @@
+name: InDhanPay Next Website CI/CD
+
+on:
+  push:
+    branches:
+      - staging
+
+env:
+  PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+  GIT_USER_EMAIL: ${{ secrets.USER_EMAIL }}
+  GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+  SERVER_IP: ${{ secrets.SERVER_IP }}
+  USERNAME_GITHUB: ${{ secrets.USERNAME_GITHUB }}
+  PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global user.email "${{ env.GIT_USER_EMAIL }}"
+          git config --global user.name "${{ env.GIT_USER_NAME }}"
+
+      - name: Go to Project Directory
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+
+      - name: Check server memory and disk space
+        run: |
+          echo "Checking memory..."
+          free -m
+          if [ $(free -m | awk '/^Mem:/{print $7}') -lt 100 ]; then
+            echo "Not enough memory available."
+            exit 1
+          fi
+
+          echo "Checking disk space..."
+          df -h
+          if [ $(df / | tail -1 | awk '{print $4}' | sed 's/G//') -lt 5 ]; then
+            echo "Not enough disk space available."
+            exit 1
+          fi
+
+      - name: Reset local changes
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+          if [[ $(git status --porcelain) ]]; then
+            # Reset local changes
+            git reset --hard
+            git clean -fd
+          fi
+
+      - name: Pull latest code
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+          git pull https://${{ env.USERNAME_GITHUB }}:${{ env.PAT_GITHUB }}@github.com/InDhan/indhanpay_nextjs_website.git staging
+
+      - name: Install NPM dependencies
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+          npm ci --unsafe-perm=true
+
+      - name: Build Next.js application
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+          npm run build
+
+      - name: Restart with PM2
+        run: |
+          cd ${{ env.PROJECT_PATH }}
+          pm2 delete indhanpay-next || true
+          pm2 start npm --name "indhanpay-next" -- start
+          pm2 save

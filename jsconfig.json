@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],                      // Root-level files
+      "@components/*": ["./components/*"], // For components
+      "@layouts/*": ["./layouts/*"],       // For layouts
+      "@utility/*": ["./utility/*"],       // For utility files
+      "@css/*": ["./public/css/*"],        // Your existing CSS alias
+      "@fonts/*": ["./public/fonts/*"]     // Your existing fonts alias
+    }
+  }
+}

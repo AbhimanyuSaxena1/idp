@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Questrial");
+@import "tailwindcss";
+
+.mil-testimonials-1.swiper,
+.mil-testimonials-2.swiper {
+  overflow: visible;
+}
+.select-color-yellow::selection {
+  background-color: #FFB200; /* Tailwind's red-500 */
+  color: #fff;
+}
+.select-color-orange::selection {
+  background-color: #F27457; /* Tailwind's red-500 */
+  color: #fff;
+}
+.mil-accordion-group .mil-accordion-content {
+  transition: height 1s ease;
+}
+.mil-accordion-group.mil-active .mil-accordion-content {
+  height: auto !important;
+}
+.mil-accordion-icon i {
+  transform: rotate(90deg);
+  transition: 0.3s all;
+}
+.mil-accordion-group .mil-accordion-icon {
+  transition: 0.3s all;
+}
+.mil-accordion-group.mil-active .mil-accordion-icon {
+  background-color: rgb(255, 178, 0) !important;
+}
+.mil-accordion-group.mil-active .mil-accordion-icon i {
+  transform: rotate(180deg);
+  color: white;
+}
